@@ -18,13 +18,26 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let windowScene = (scene as? UIWindowScene) else { return }
+        
+        //Create Nav Controller
+        let navController = UINavigationController(rootViewController: MainVC())
+        UINavigationBar.appearance().shadowImage = UIImage()
+        UINavigationBar.appearance().isTranslucent = true
 
         //source: https://www.youtube.com/watch?v=Htn4h51BQsk
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
-        window?.rootViewController = UINavigationController(rootViewController: MainVC())
+        window?.rootViewController = navController
         window?.makeKeyAndVisible()
     }
+    
+//    fileprivate func createNavigationController() -> UINavigationController {
+//        let navController = UINavigationController(rootViewController: MainVC())
+//        UINavigationBar.appearance().shadowImage = UIImage()
+//        UINavigationBar.appearance().isTranslucent = false
+//
+//        return navController
+//    }
 
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
