@@ -295,7 +295,7 @@ extension Reminder {
     //All, option to chose to show completed/not complete
     static func allReminders(_ showCompleted: Bool) -> Results<Reminder>? {
         guard let realm = MyRealm.getConfig() else { return nil }
-        let allReminders = realm.objects(Reminder.self)
+        let allReminders = realm.objects(Reminder.self).sorted(byKeyPath: "sortIndex", ascending: true)
         
         return showCompleted ? allReminders : allReminders.filter("isCompleted == %d", showCompleted)
     }
@@ -316,6 +316,16 @@ extension Reminder {
     
     static var numberOfFlaggedReminders: Int {
         return flaggedReminders(false)?.count ?? 0
+    }
+    
+    //Search for Reminders
+    static func searchReminders(with searchText: String) -> Results<Reminder>? {
+        guard let realm = MyRealm.getConfig() else { return nil }
+        let searchPredicate = NSPredicate(format: "name CONTAINS[c] %@", searchText)        //CONTAINS[c] for case-insensitive matching
+        let filteredReminders = realm.objects(Reminder.self)
+            .filter(searchPredicate)
+        
+        return filteredReminders
     }
     
     

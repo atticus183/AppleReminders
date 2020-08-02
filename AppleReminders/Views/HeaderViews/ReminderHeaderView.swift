@@ -20,7 +20,7 @@ class ReminderHeaderView: UITableViewHeaderFooterView {
         didSet {
             guard let vcType = vcType else { return }
             switch vcType {
-            case .all:
+            case .all, .search(_):
                 guard let reminderList = reminderList else { return }
                 sectionLbl.textColor = reminderList.listUIColor
                 sectionLbl.text = reminderList.name

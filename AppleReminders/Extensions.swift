@@ -159,6 +159,7 @@ extension UIViewController {
             navBarAppearance.largeTitleTextAttributes = [.foregroundColor: largeTitleColor]
             navBarAppearance.titleTextAttributes = [.foregroundColor: largeTitleColor]
             navBarAppearance.backgroundColor = backgroundColor
+            navBarAppearance.shadowColor = .clear
             
             navigationController?.navigationBar.standardAppearance = navBarAppearance
             navigationController?.navigationBar.compactAppearance = navBarAppearance
@@ -168,12 +169,12 @@ extension UIViewController {
             navigationController?.navigationBar.isTranslucent = false
             navigationController?.navigationBar.tintColor = tintColor
             navigationItem.title = title
-            
         } else {
             // Fallback on earlier versions
             navigationController?.navigationBar.barTintColor = backgroundColor
             navigationController?.navigationBar.tintColor = tintColor
             navigationController?.navigationBar.isTranslucent = false
+            navigationController?.navigationBar.shadowImage = UIImage() //removes shadow
             navigationItem.title = title
         }
     }
@@ -198,4 +199,20 @@ extension UITextField {
        }
    }
 
+}
+
+
+extension UIUserInterfaceStyle {
+    var description: String {
+        switch self {
+        case .unspecified:
+            return "Unspecified"
+        case .light:
+            return "Light"
+        case .dark:
+            return "Dark"
+        @unknown default:
+            return ""
+        }
+    }
 }

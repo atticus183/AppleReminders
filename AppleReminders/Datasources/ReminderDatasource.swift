@@ -161,6 +161,7 @@ class ReminderDatasource: NSObject {
         case scheduled
         case today
         case flagged
+        case search(String)
     }
     
     private func getSections() -> [String] {
@@ -168,7 +169,7 @@ class ReminderDatasource: NSObject {
         guard let reminders = getReminders() else { return [] }
         
         switch reminderFilter {
-        case .all:  //List names titles and color, section will be listID
+        case .all, .search(_):  //List names titles and color, section will be listID
             var uniqueListIDs: [String] = reminders.map({ $0.inList!.reminderListID })
             uniqueListIDs.removeDuplicates()
             return uniqueListIDs
@@ -195,10 +196,13 @@ class ReminderDatasource: NSObject {
             return Reminder.todayReminders(showCompleted)
         case .flagged:  //Flagged, not complete
             return Reminder.flaggedReminders(showCompleted)
+        case .search(let searchText):
+            let filteredReminders = Reminder.searchReminders(with: searchText)
+            return filteredReminders
         }
     }
     
-    
+    //TODO: Merge load method with createSnapshot method
     func load() {
         guard let tableView = tableView else { return }
         reminderDiffableDatasource = ReminderDiffableDatasource(tableView: tableView, cellProvider: { [weak self] (tableView, indexPath, reminder) -> ReminderTVCell? in
@@ -247,7 +251,10 @@ class ReminderDatasource: NSObject {
                     if reminder.isExpanded && reminder.subtasks.count > 0 && reminder.inList?.reminderListID == section {
                         reminder.subtasks.forEach({ snapshot.appendItems([$0], toSection: section) })
                     }
-                    
+                case .search(_): //List names titles and color, section will be listID. Treat subtasks as regular reminders
+                    if reminder.inList?.reminderListID == section {
+                        snapshot.appendItems([reminder], toSection: section)
+                    }
                 case .today, .flagged: //no section titles, do not show subtasks under parent
                     snapshot.appendItems([reminder], toSection: section)
                 case .byList(_):  //no section titles
@@ -297,7 +304,10 @@ class ReminderDatasource: NSObject {
                     if reminder.isExpanded && reminder.subtasks.count > 0 && reminder.inList?.reminderListID == section {
                         reminder.subtasks.forEach({ snapshot.appendItems([$0], toSection: section) })
                     }
-                    
+                case .search(_):  //List names titles and color, section will be listID.  Treat subtasks as regular reminders
+                    if reminder.inList?.reminderListID == section {
+                        snapshot.appendItems([reminder], toSection: section)
+                    }
                 case .today, .flagged: //no section titles, do not show subtasks under parent
                     snapshot.appendItems([reminder], toSection: section)
                 case .byList(_):  //no section titles

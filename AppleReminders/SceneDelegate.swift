@@ -21,8 +21,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         //Create Nav Controller
         let navController = UINavigationController(rootViewController: MainVC())
-        UINavigationBar.appearance().shadowImage = UIImage()
-        UINavigationBar.appearance().isTranslucent = true
 
         //source: https://www.youtube.com/watch?v=Htn4h51BQsk
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)

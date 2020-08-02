@@ -26,6 +26,9 @@ class MainVC: UIViewController {
         return tv
     }()
     
+    var searchController: UISearchController?
+    var searchControllerVC: ReminderListTVC?
+    
     private var realmListToken: NotificationToken?
     
     
@@ -38,6 +41,8 @@ class MainVC: UIViewController {
         super.viewDidLoad()
         
         print("Default realm location: \(String(describing: realm?.configuration.fileURL))")
+        
+        self.view.backgroundColor = .systemBackground
         
 //        try! realm?.write {
 //            realm?.deleteAll()
@@ -90,6 +95,8 @@ class MainVC: UIViewController {
         }
         
         setupNavBar()
+        setupSearch()
+        
     }
     
     deinit {
@@ -139,19 +146,24 @@ class MainVC: UIViewController {
     }
     
     private func setupNavBar() {
-        //FIXME:  TODO - add ReminderListTVC to searchResultsController
-        navigationItem.searchController = UISearchController(searchResultsController: nil)
-        navigationItem.hidesSearchBarWhenScrolling = false
         navigationItem.rightBarButtonItem = editButtonItem
-        navigationController?.navigationBar.barTintColor = .systemBackground
         navigationController?.navigationBar.prefersLargeTitles = false
         navigationController?.navigationBar.isTranslucent = true
-        navigationController?.navigationBar.shadowImage = UIImage()
         
         //Change the back button text
         let backItem = UIBarButtonItem()
         backItem.title = "Lists"
         navigationItem.backBarButtonItem = backItem
+    }
+    
+    private func setupSearch() {
+        searchControllerVC = ReminderListTVC()
+        searchControllerVC?.vcType = .search("")
+        searchController = UISearchController(searchResultsController: searchControllerVC)
+        searchController?.searchResultsUpdater = self
+        searchController?.obscuresBackgroundDuringPresentation = false
+        searchController?.searchBar.placeholder = "Search"
+        navigationItem.searchController = searchController
     }
     
 }
@@ -295,7 +307,15 @@ extension MainVC: ReminderListCellDelegate {
 
 
 //MARK: Search implementation
-extension MainVC: UISearchBarDelegate {}
+//extension MainVC: UISearchBarDelegate {}
+extension MainVC: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        searchControllerVC?.vcType = .search(searchController.searchBar.text!)
+        searchControllerVC?.reminderDatasource.reminderFilter = .search(searchController.searchBar.text!)
+        searchControllerVC?.tableView.contentInset = UIEdgeInsets(top: -36, left: 0, bottom: 0, right: 0)  //tableView requires adjust when searching
+        searchControllerVC?.reminderDatasource.load()
+    }
+}
 
 
 

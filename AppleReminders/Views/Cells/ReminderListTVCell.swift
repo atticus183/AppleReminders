@@ -34,6 +34,7 @@ class ReminderListTVCell: UITableViewCell {
             //Set up icon -- list or group
             let iconImg = list.getListIcon
             listIconImgView.image = iconImg
+            listIconImgView.tintColor = list.isGroup ? .systemGray : .white
         }
     }
     

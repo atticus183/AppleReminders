@@ -36,7 +36,6 @@ class ReminderTVCell: UITableViewCell {
             completedBtn.setBackgroundImage(completedBtnImgString, for: .normal)
             completedBtn.tintColor = reminder.isCompleted ? reminder.listColor : .systemGray3
             
-            //MARK: BtnSV Configure
             flagIconImgView.isHidden = reminder.isFlagged ? false : true
             
             //Subtask count lbl
@@ -91,7 +90,7 @@ class ReminderTVCell: UITableViewCell {
                     self.urlActionView.titleLabel.text = reminderUrl
                 }
             }
-                
+            
             if reminder.isLocationReminder {
                 self.locationActionView.isHidden = false
                 self.locationActionView.iconType = .location
@@ -127,7 +126,7 @@ class ReminderTVCell: UITableViewCell {
         willSet { NSLayoutConstraint.deactivate(cellViewConstraints) }
         didSet { NSLayoutConstraint.activate(cellViewConstraints) }
     }
-     
+    
     lazy var completedBtn: UIButton = {
         let button = UIButton()
         button.setBackgroundImage(UIImage(systemName: "circle"), for: .normal)
@@ -299,11 +298,11 @@ class ReminderTVCell: UITableViewCell {
         super.layoutSubviews()
         
         self.indentationLevel = 0
-
+        
         self.selectionStyle = self.isEditing ? .default : .none
         completedBtn.isHidden = self.isEditing ? true : false
         nameTxtBox.isEnabled = self.isEditing ? false : true
-//        accessoryImageView.isHidden = self.isEditing ? true : false
+        //        accessoryImageView.isHidden = self.isEditing ? true : false
         
         setupViewConstraint()
     }
@@ -340,7 +339,7 @@ class ReminderTVCell: UITableViewCell {
         
         if let reminder = reminder, let reminderDatasourceFilter = reminderDatasourceFilter {
             switch reminderDatasourceFilter {
-            case .today, .flagged:
+            case .today, .flagged, .search(_):  //NOT indented
                 indentLevel = 0
             default:
                 indentLevel = reminder.isSubtask ? 20 : 0
@@ -361,7 +360,6 @@ class ReminderTVCell: UITableViewCell {
             buttonSV.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 6),
             buttonSV.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor,constant: -8),
             buttonSV.heightAnchor.constraint(equalToConstant: 25),
-            //        buttonSV.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
             
             chevronBtn.heightAnchor.constraint(equalToConstant: 25),
             chevronBtn.widthAnchor.constraint(equalToConstant: 25),
@@ -374,7 +372,7 @@ class ReminderTVCell: UITableViewCell {
             separatorView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: 0),
             separatorView.heightAnchor.constraint(equalToConstant: 0.5)
         ]
-
+        
     }
     
     private func configure() {
@@ -388,7 +386,7 @@ extension ReminderTVCell: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         detailDisclosureBtn.isHidden = false
     }
-
+    
     func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
         detailDisclosureBtn.isHidden = true
         

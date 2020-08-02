@@ -127,11 +127,9 @@ class ReminderListTVC: UIViewController {
     let tableView: UITableView = {
         let tv = UITableView(frame: .zero, style: .grouped)
         tv.backgroundColor = .systemBackground
-        tv.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         tv.separatorStyle = .none
         tv.tableFooterView = UIView()  //removes empty cells from the bottom
-        tv.translatesAutoresizingMaskIntoConstraints = false
-        
+        tv.allowsMultipleSelectionDuringEditing = true
         return tv
     }()
     
@@ -157,6 +155,9 @@ class ReminderListTVC: UIViewController {
             footerView.isHidden = true
         case .flagged:
             reminderDatasource.reminderFilter = .flagged
+        case .search(let searchText):
+            reminderDatasource.reminderFilter = .search(searchText)
+            footerView.isHidden = true
         case .none:
             fatalError()
         }
@@ -206,7 +207,7 @@ class ReminderListTVC: UIViewController {
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(true)
+        super.viewDidDisappear(animated)
         setupNavBarBtn()
         RealmHelper.deleteEmptyRealmReminder()
     }
@@ -228,24 +229,34 @@ class ReminderListTVC: UIViewController {
     }
 
     private func setupNavBar() {
-        setupNavBarBtn()
-        self.configureNavigationBar(largeTitleColor: vcType?.vcTitleColor ?? .label, backgroundColor: .systemBackground, tintColor: .systemBlue, title: vcType?.vcTitle ?? "Reminders", preferredLargeTitle: true)
+        switch vcType! {
+        case .search(_):
+            return
+        default:
+            setupNavBarBtn()
+            self.configureNavigationBar(largeTitleColor: vcType?.vcTitleColor ?? .label, backgroundColor: .systemBackground, tintColor: .systemBlue, title: vcType?.vcTitle ?? "Reminders", preferredLargeTitle: true)
+        }
     }
     
     private func setupNavBarBtn() {
-        var isCellEditing = false
-        //If any tableView cell is a firstResponder, create donebtn
-        for cell in tableView.visibleCells {
-            if let reminderCell = cell as? ReminderTVCell {
-                if reminderCell.nameTxtBox.isFirstResponder {
-                    isCellEditing = true
-                    createDoneNavBarBtn()
+        switch vcType! {
+        case .search(_):
+            return
+        default:
+            var isCellEditing = false
+            //If any tableView cell is a firstResponder, create donebtn
+            for cell in tableView.visibleCells {
+                if let reminderCell = cell as? ReminderTVCell {
+                    if reminderCell.nameTxtBox.isFirstResponder {
+                        isCellEditing = true
+                        createDoneNavBarBtn()
+                    }
                 }
             }
-        }
-        
-        if !isCellEditing {
-            createEllipsisNavBarBtn()
+            
+            if !isCellEditing {
+                createEllipsisNavBarBtn()
+            }
         }
     }
     
@@ -339,6 +350,7 @@ class ReminderListTVC: UIViewController {
     
     private func setupViewConstraints() {
         footerView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         
         footerView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
         footerView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 0).isActive = true
@@ -350,8 +362,8 @@ class ReminderListTVC: UIViewController {
         tableView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 0).isActive = true
         tableView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor,constant: 0).isActive = true
     }
-
- 
+    
+    
 }
 
 extension ReminderListTVC: ReminderTVCellDelegate {
@@ -422,12 +434,12 @@ extension ReminderListTVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ReminderHeaderView.reuseIdentifier) as! ReminderHeaderView
         let snapShot = reminderDatasource.reminderDiffableDatasource?.snapshot()
-        let sectionID = snapShot?.sectionIdentifiers[section] ?? ""
+        guard let sectionID = snapShot?.sectionIdentifiers[section] else { return nil }
         
         switch vcType! {
         case .scheduled:
             headerView.sectionDate = sectionID
-        case .all:
+        case .all, .search(_):
             let list = ReminderList.getList(by: sectionID)
             headerView.reminderList = list
         default:
@@ -441,7 +453,7 @@ extension ReminderListTVC: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         switch vcType {
-        case .scheduled, .all:
+        case .scheduled, .all, .search(_):
             return ReminderHeaderView.height
         default:
             return 0
@@ -527,27 +539,32 @@ extension ReminderListTVC: UITableViewDelegate {
     //MARK:  Leading swipe actions
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
-        if indexPath.row > 0 {
-            guard let reminder = reminderDatasource.reminderDiffableDatasource?.itemIdentifier(for: indexPath) else { return nil }
-            let actionText = reminder.isSubtask ? "Outdent" : "Indent"
-            
-            let indent = UIContextualAction(style: .normal, title: actionText) { [weak self] (_, _, _)  in
-                guard let self = self else { return }
-                if let reminder = self.reminderDatasource.reminderDiffableDatasource?.itemIdentifier(for: indexPath) {
-                    if reminder.isSubtask {
-                        reminder.outdentReminder()
-                    } else {
-                        reminder.indentReminder()
+        switch vcType! {
+        case .search(_):
+            return nil  //not allowed if searching for a reminder
+        default:
+            if indexPath.row > 0 {
+                guard let reminder = reminderDatasource.reminderDiffableDatasource?.itemIdentifier(for: indexPath) else { return nil }
+                let actionText = reminder.isSubtask ? "Outdent" : "Indent"
+                
+                let indent = UIContextualAction(style: .normal, title: actionText) { [weak self] (_, _, _)  in
+                    guard let self = self else { return }
+                    if let reminder = self.reminderDatasource.reminderDiffableDatasource?.itemIdentifier(for: indexPath) {
+                        if reminder.isSubtask {
+                            reminder.outdentReminder()
+                        } else {
+                            reminder.indentReminder()
+                        }
                     }
                 }
+                
+                indent.backgroundColor = .systemGray
+                
+                return UISwipeActionsConfiguration(actions: [indent])
             }
-            
-            indent.backgroundColor = .systemGray
-            
-            return UISwipeActionsConfiguration(actions: [indent])
-        } else {
-            return nil
         }
+        
+        return nil
     }
 
     func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
@@ -565,6 +582,7 @@ extension ReminderListTVC {
         case scheduled
         case all
         case flagged
+        case search(String)
         
         var vcTitle: String {
             switch self {
@@ -578,6 +596,9 @@ extension ReminderListTVC {
                 return "All"
             case .flagged:
                 return "Flagged"
+            case .search:
+                //Not title text needed
+                return ""
             }
         }
         
@@ -593,6 +614,9 @@ extension ReminderListTVC {
                 return .darkGray
             case .flagged:
                 return .systemRed
+            case .search:
+                //No title color needed
+                return .label
             }
         }
         
