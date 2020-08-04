@@ -23,7 +23,7 @@ class ReminderTVCell: UITableViewCell {
     weak var delegate: ReminderTVCellDelegate?
     var cellExpand: (() ->Void)?
     
-    var reminderDatasourceFilter: ReminderDatasource.Filter?
+    var reminderDatasourceFilter: ReminderListTVC.VCType?
     
     var reminder: Reminder? {
         didSet {

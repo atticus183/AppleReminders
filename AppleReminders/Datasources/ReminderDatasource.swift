@@ -146,7 +146,7 @@ final class ReminderDiffableDatasource: UITableViewDiffableDataSource<String, Re
 class ReminderDatasource: NSObject {
     
     var reminderDiffableDatasource: ReminderDiffableDatasource?
-    var reminderFilter: Filter?
+    var reminderFilter: ReminderListTVC.VCType?
     var tableView: UITableView?
     
     //A NotificationToken is passed so the observer on MainVC isn't called when a user moves a list.
@@ -154,15 +154,6 @@ class ReminderDatasource: NSObject {
     
     //Toggle if the user wants to show completed todos
     var showCompleted = true
-    
-    enum Filter {
-        case all
-        case byList(ReminderList)
-        case scheduled
-        case today
-        case flagged
-        case search(String)
-    }
     
     private func getSections() -> [String] {
         guard let reminderFilter = reminderFilter else { return [] }
@@ -173,7 +164,7 @@ class ReminderDatasource: NSObject {
             var uniqueListIDs: [String] = reminders.map({ $0.inList!.reminderListID })
             uniqueListIDs.removeDuplicates()
             return uniqueListIDs
-        case .today, .flagged, .byList(_):  //no section titles
+        case .today, .flagged, .reminderList(_):  //no section titles
             return ["Main"]
         case .scheduled:    //date string in the format: Mon Oct 24, 2011
             var sectionDates: [String] = reminders.map({ $0.formatDueDateForSection() })
@@ -188,7 +179,7 @@ class ReminderDatasource: NSObject {
         switch reminderFilter {
         case .all:  //All, option to chose to show completed/not complete
             return Reminder.allReminders(showCompleted)
-        case .byList(let list):
+        case .reminderList(let list):
             return Reminder.reminders(in: list, showCompleted)
         case .scheduled:    //Scheduled, due date not nil, option to chose to show completed/not complete
             return Reminder.scheduledReminders(showCompleted)
@@ -257,7 +248,7 @@ class ReminderDatasource: NSObject {
                     }
                 case .today, .flagged: //no section titles, do not show subtasks under parent
                     snapshot.appendItems([reminder], toSection: section)
-                case .byList(_):  //no section titles
+                case .reminderList(_):  //no section titles
                     if !reminder.isSubtask {
                         snapshot.appendItems([reminder])
                     }
@@ -310,7 +301,7 @@ class ReminderDatasource: NSObject {
                     }
                 case .today, .flagged: //no section titles, do not show subtasks under parent
                     snapshot.appendItems([reminder], toSection: section)
-                case .byList(_):  //no section titles
+                case .reminderList(_):  //no section titles
                     if !reminder.isSubtask {
                         snapshot.appendItems([reminder], toSection: section)
                     }

@@ -143,36 +143,27 @@ class ReminderListTVC: UIViewController {
     
         switch vcType {
         case .reminderList(let list):
-            reminderDatasource.reminderFilter = .byList(list)
             passedReminderList = list
-        case .today:
-            reminderDatasource.reminderFilter = .today
-        case .scheduled:
-            reminderDatasource.reminderFilter = .scheduled
-            footerView.isHidden = true
-        case .all:
-            reminderDatasource.reminderFilter = .all
-            footerView.isHidden = true
-        case .flagged:
-            reminderDatasource.reminderFilter = .flagged
-        case .search(let searchText):
-            reminderDatasource.reminderFilter = .search(searchText)
+        case .scheduled, .all, .search(_):
             footerView.isHidden = true
         case .none:
             fatalError()
+        default:
+            break
         }
-  
+        
         setupAddBtnColors()
         addViewsToVC(views: tableView, footerView)
         setupViewConstraints()
         
         tableView.register(ReminderTVCell.self, forCellReuseIdentifier: ReminderTVCell.identifier)
-        print("TodoHeaderView: \(ReminderHeaderView.reuseIdentifier), AddTodoFooterView: \(AddReminderFooterView.reuseIdentifier)")
         tableView.register(ReminderHeaderView.self, forHeaderFooterViewReuseIdentifier: ReminderHeaderView.reuseIdentifier)
         tableView.register(AddReminderFooterView.self, forHeaderFooterViewReuseIdentifier: AddReminderFooterView.reuseIdentifier) 
         tableView.delegate = self
+        
+        //setup datasource
+        reminderDatasource.reminderFilter = vcType
         reminderDatasource.tableView = tableView
-        tableView.allowsMultipleSelectionDuringEditing = true
   
         setupNavBar()
         
@@ -584,7 +575,7 @@ extension ReminderListTVC {
         case flagged
         case search(String)
         
-        var vcTitle: String {
+        fileprivate var vcTitle: String {
             switch self {
             case .reminderList(let list):
                 return list.name
@@ -602,7 +593,7 @@ extension ReminderListTVC {
             }
         }
         
-        var vcTitleColor: UIColor {
+        fileprivate var vcTitleColor: UIColor {
             switch self {
             case .reminderList(let list):
                 return CustomColors.systemColorsDict[list.listColor] ?? UIColor.label
@@ -619,6 +610,5 @@ extension ReminderListTVC {
                 return .label
             }
         }
-        
     }
 }
