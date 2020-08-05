@@ -12,7 +12,7 @@ protocol PriorityDelegate: class {
     func passPriority(priority: Reminder.Priority?)
 }
 
-class PriorityTVC: UITableViewController {
+final class PriorityTVC: UITableViewController {
     
     weak var delegate: PriorityDelegate?
     var selectedPriority: Reminder.Priority?

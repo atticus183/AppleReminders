@@ -14,7 +14,7 @@ protocol RepeatDelegate: class {
 }
 
 
-class RepeatTVC: UITableViewController {
+final class RepeatTVC: UITableViewController {
     
     weak var delegate: RepeatDelegate?
     var selectedRepeatPeriod: Reminder.RepeatingPeriod?

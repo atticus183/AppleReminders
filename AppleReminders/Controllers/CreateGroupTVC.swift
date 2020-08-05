@@ -9,7 +9,7 @@
 import RealmSwift
 import UIKit
 
-class CreateGroupTVC: UITableViewController {
+final class CreateGroupTVC: UITableViewController {
     
     let realm = MyRealm.getConfig()
     

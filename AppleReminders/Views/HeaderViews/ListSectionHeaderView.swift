@@ -33,7 +33,7 @@ class ListSectionHeaderView: UITableViewHeaderFooterView {
         
         setupViews()
         
-        self.contentView.backgroundColor = .systemBackground
+        self.contentView.backgroundColor = .systemGroupedBackground
     }
     
     required init?(coder aDecoder: NSCoder) {

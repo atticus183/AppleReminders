@@ -352,7 +352,7 @@ extension Reminder {
     //Get list color
     var listColor: UIColor {
         let listColor = self.ownerReminder.first?.inList?.listColor ?? self.inList?.listColor ?? "systemBlue"
-        let checkBoxColor: UIColor = CustomColors.systemColorsDict[listColor]!
+        let checkBoxColor: UIColor = CustomColors.systemColorsDict[listColor] ?? .systemBlue
         return checkBoxColor
     }
     
@@ -468,6 +468,12 @@ extension Reminder {
             for subtask in modifiedReminder.subtasks {
                 if !self.subtasks.contains(subtask) {
                     self.subtasks.append(subtask)
+                }
+            }
+            
+            for subtask in self.subtasks {
+                if !modifiedReminder.subtasks.contains(subtask) {
+                    realm?.delete(subtask)
                 }
             }
         }

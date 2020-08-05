@@ -27,6 +27,8 @@ class DatePickerTVCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
+        self.contentView.backgroundColor = .secondarySystemGroupedBackground
+        
         self.addViews(views: datePicker)
         self.addConstraints()
     }

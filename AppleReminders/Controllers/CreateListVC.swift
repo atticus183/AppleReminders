@@ -10,7 +10,7 @@ import UIKit
 import SwiftUI
 import RealmSwift
 
-class CreateListVC: UIViewController {
+final class CreateListVC: UIViewController {
     
     let realm = MyRealm.getConfig()
     
@@ -128,6 +128,7 @@ class CreateListVC: UIViewController {
         
         addViewsToVC(views: cancelBtn, vcTitleLbl, doneBtn, iconPreview, listNameTxt)
         
+        selectedListColorString = CustomColors.defaultListColor
         loadEditingList()
         createListModel = SampleData.generateCreateListModel()
         

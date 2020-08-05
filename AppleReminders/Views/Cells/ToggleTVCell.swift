@@ -37,6 +37,8 @@ class ToggleTVCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
+        self.backgroundColor = .secondarySystemGroupedBackground
+        
         self.addSubview(descriptionLbl)
         self.addSubview(switchToggle)
         setupConstraints()

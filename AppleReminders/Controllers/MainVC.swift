@@ -10,7 +10,7 @@ import RealmSwift
 import SwiftUI
 import UIKit
 
-class MainVC: UIViewController {
+final class MainVC: UIViewController {
     
     let realm = MyRealm.getConfig()
     
@@ -22,7 +22,7 @@ class MainVC: UIViewController {
     let tableView: UITableView = {
         let tv = UITableView(frame: .zero, style: .insetGrouped)
         tv.separatorStyle = .none
-        tv.backgroundColor = .systemBackground
+        tv.backgroundColor = .systemGroupedBackground
         return tv
     }()
     
@@ -42,7 +42,7 @@ class MainVC: UIViewController {
         
         print("Default realm location: \(String(describing: realm?.configuration.fileURL))")
         
-        self.view.backgroundColor = .systemBackground
+        self.view.backgroundColor = .systemGroupedBackground
         
 //        try! realm?.write {
 //            realm?.deleteAll()
@@ -96,7 +96,6 @@ class MainVC: UIViewController {
         
         setupNavBar()
         setupSearch()
-        
     }
     
     deinit {
@@ -150,6 +149,15 @@ class MainVC: UIViewController {
         navigationController?.navigationBar.prefersLargeTitles = false
         navigationController?.navigationBar.isTranslucent = true
         
+        let navBarAppearance = UINavigationBarAppearance()
+        navBarAppearance.configureWithOpaqueBackground()
+        navBarAppearance.backgroundColor = .systemGroupedBackground
+        navBarAppearance.shadowColor = .clear
+        
+        navigationController?.navigationBar.standardAppearance = navBarAppearance
+        navigationController?.navigationBar.compactAppearance = navBarAppearance
+        navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
+        
         //Change the back button text
         let backItem = UIBarButtonItem()
         backItem.title = "Lists"
@@ -180,7 +188,6 @@ extension MainVC {
             switch section {
             case .type:
                 let blankCell = tableView.dequeueReusableCell(withIdentifier: "BlankTVCell", for: indexPath)
-                blankCell.backgroundColor = .systemTeal
                 let height = blankCell.frame.height
                 let width = blankCell.frame.width
                 self.addChild(self.childVC)

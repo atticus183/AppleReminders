@@ -54,6 +54,8 @@ class ReminderContactTVCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
+        self.contentView.backgroundColor = .secondarySystemGroupedBackground
+        
         self.addSubview(contactPicImgView)
         self.addSubview(contactNameLbl)
         self.addSubview(editBtn)

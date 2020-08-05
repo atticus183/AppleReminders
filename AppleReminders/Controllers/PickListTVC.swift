@@ -14,7 +14,7 @@ protocol PassSelectedListDelegate: class {
     func pass(selectedList: ReminderList)
 }
 
-class PickListTVC: UIViewController {
+final class PickListTVC: UIViewController {
     
     let realm = MyRealm.getConfig()
     
@@ -55,8 +55,8 @@ class PickListTVC: UIViewController {
     }
     
     private func createMoveRemindersText() {
-        guard let remindersToMove = remindersToMove, let vcPurpose = vcPurpose else { return }
-        let firstReminder = remindersToMove.first!.name
+        guard let remindersToMove = remindersToMove, let reminderToMove = remindersToMove.first, let vcPurpose = vcPurpose else { return }
+        let firstReminder = reminderToMove.name
         
         if vcPurpose == .moveTo {
             var text = firstReminder

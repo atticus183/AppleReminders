@@ -10,7 +10,7 @@ import UIKit
 import RealmSwift
 
 
-class ReminderListTVC: UIViewController {
+final class ReminderListTVC: UIViewController {
     
     let realm = MyRealm.getConfig()
     
@@ -96,10 +96,12 @@ class ReminderListTVC: UIViewController {
     }
     
     @objc func moveReminderBtnTapped() {
-        let pickListTVC = PickListTVC()
-        pickListTVC.vcPurpose = .moveTo
-        pickListTVC.remindersToMove = selectedReminders
-        self.present(UINavigationController(rootViewController: pickListTVC), animated: true, completion: nil)
+        if selectedReminders.count > 0 {
+            let pickListTVC = PickListTVC()
+            pickListTVC.vcPurpose = .moveTo
+            pickListTVC.remindersToMove = selectedReminders
+            self.present(UINavigationController(rootViewController: pickListTVC), animated: true, completion: nil)
+        }
     }
     
     @objc func deleteReminderBtnTapped() {

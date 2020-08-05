@@ -61,7 +61,7 @@ class TypeCVCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        contentView.backgroundColor = .systemGray6
+        contentView.backgroundColor = .secondarySystemGroupedBackground
         contentView.layer.cornerRadius = 12
         
         iconBackgroundView.addSubview(typeImgView)

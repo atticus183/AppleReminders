@@ -13,7 +13,7 @@ protocol SendSelectedListsDelegate: class {
     func pass(lists: [ReminderList])
 }
 
-class AddListToGroupTVC: UITableViewController {
+final class AddListToGroupTVC: UITableViewController {
     
     var selectedLists = [ReminderList]()
     
@@ -50,60 +50,6 @@ class AddListToGroupTVC: UITableViewController {
         
         print("Selected lists: \(selectedLists.count)")
     }
-    
-    // MARK: - Table view data source
-//    override func numberOfSections(in tableView: UITableView) -> Int {
-//        return 2
-//    }
-//
-//    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        guard let allLists = availableLists else { return 3 }
-//
-//        switch section {
-//        case 0:
-//            return selectedLists.count == 0 ? allLists.count : selectedLists.count
-//        case 1:
-//            return selectedLists.count == 0 ? 0 : selectedLists.count
-//        default:
-//            return 0
-//        }
-//    }
-    
-//    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath)
-//
-//        let availableList = availableLists?[indexPath.row]
-//        var listName: String
-//
-//        switch indexPath.section {
-//        case 0:
-//            let selectedList = selectedLists.count == 0 ? nil : selectedLists[indexPath.row]
-//            listName = selectedLists.count == 0 ? availableList?.name ?? "" : selectedList?.name ?? ""
-//        case 1:
-//            listName = availableList?.name ?? ""
-//        default:
-//            return cell
-//        }
-//
-//        cell.textLabel?.text = listName
-//
-//        return cell
-//    }
-
-//    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: AddListToGroupHeaderView.reuseIdentifier) as! AddListToGroupHeaderView
-//
-//        switch section {
-//        case 0:
-//            headerView.title = selectedLists.count == 0 ? "MORE LISTS" : "INCLUDE"
-//        case 1:
-//            headerView.title = selectedLists.count == 0 ? "" : "MORE LISTS"
-//        default:
-//            break
-//        }
-//
-//        return headerView
-//    }
         
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return AddListToGroupHeaderView.height

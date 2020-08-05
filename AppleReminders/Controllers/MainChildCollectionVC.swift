@@ -8,22 +8,20 @@
 
 import UIKit
 
-class MainChildCollectionVC: UIViewController, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+final class MainChildCollectionVC: UIViewController, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     lazy var collectionViewDatasource = ReminderTypeDatasource()
     
     var didTapCell: ((ReminderType) -> Void)?
     
     let collectionView: UICollectionView = {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-        cv.backgroundColor = .systemBackground
+        cv.backgroundColor = .systemGroupedBackground
         cv.register(TypeCVCell.self, forCellWithReuseIdentifier: TypeCVCell.reuseIdentifier)
         return cv
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.view.backgroundColor = .systemYellow
         
         self.view.addSubview(collectionView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false

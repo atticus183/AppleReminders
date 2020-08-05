@@ -49,9 +49,6 @@ class ReminderListTVCell: UITableViewCell {
         return label
     }()
     
-    //MARK: account ui components
-//    let listContainerView = UIView()
-    
     lazy var iconBackgroundView: UIView = {
         let view = UIView()
         view.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
@@ -72,7 +69,6 @@ class ReminderListTVCell: UITableViewCell {
     
     lazy var listNameLbl: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 15, weight: .medium)
         label.textColor = .label
         
         return label
@@ -88,8 +84,7 @@ class ReminderListTVCell: UITableViewCell {
     
     lazy var numberOfActiveRemindersLbl: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
-        label.textColor = .label
+        label.textColor = .secondaryLabel
         
         return label
     }()
@@ -177,7 +172,8 @@ class ReminderListTVCell: UITableViewCell {
     
     private func setupListViews() {
         //add ui elements to containerView
-        self.contentView.backgroundColor = .systemGray6
+//        self.contentView.backgroundColor = .systemGray6
+        self.contentView.backgroundColor = .secondarySystemGroupedBackground
         seperatorView.backgroundColor = UIColor.systemGray.withAlphaComponent(0.5)
         
         //add views to containerView

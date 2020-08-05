@@ -12,7 +12,7 @@ protocol EndRepeatDelegate: class {
     func pass(repeatEndDate: Date?)
 }
 
-class EndRepeatTVC: UITableViewController {
+final class EndRepeatTVC: UITableViewController {
     
     weak var delegate: EndRepeatDelegate?
     var selectedRepeatEndDate: Date?

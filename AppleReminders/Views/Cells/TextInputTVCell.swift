@@ -16,6 +16,7 @@ class TextInputTVCell: UITableViewCell {
     
     lazy var inputTextField: UITextField = {
         let textField = UITextField()
+        textField.backgroundColor = .clear
         textField.textColor = .label
         textField.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         textField.attributedPlaceholder = NSAttributedString(string: "Text",
@@ -27,7 +28,7 @@ class TextInputTVCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        self.backgroundColor = .systemBackground
+        self.contentView.backgroundColor = .secondarySystemGroupedBackground
         
         self.addSubview(inputTextField)
         setupConstraints()

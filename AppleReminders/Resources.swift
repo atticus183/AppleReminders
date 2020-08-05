@@ -11,6 +11,9 @@ import UIKit
 
 
 struct CustomColors {
+    
+    static let defaultListColor = "systemBlue"
+    
     static let systemColors = [
         "systemRed",
         "systemOrange",
@@ -34,7 +37,6 @@ struct CustomColors {
     }
     
     static let systemColorsDict = [
-        //TODO:  Not finished
         "systemRed": UIColor.systemRed,
         "systemOrange": UIColor.systemOrange,
         "systemYellow": UIColor.systemYellow,

@@ -38,6 +38,7 @@ struct CreateReminderCellManager {
     //MARK: alarm value1 cell - if isRemindOnDay
     static func alarmCell(for reminder: Reminder?, isDatePickerVisible: Bool) -> UITableViewCell {
         let cell = UITableViewCell(style: .value1 , reuseIdentifier: nil)
+        cell.contentView.backgroundColor = .secondarySystemGroupedBackground
         cell.textLabel?.text = isDatePickerVisible ? reminder?.formatDueDateAsString() : "Alarm"
         cell.detailTextLabel?.text = isDatePickerVisible ? "" : reminder?.formatDueDateAsString()
         cell.textLabel?.textColor = isDatePickerVisible ? .systemBlue : .label
@@ -76,6 +77,7 @@ struct CreateReminderCellManager {
         let repeatCell = UITableViewCell(style: .value1 , reuseIdentifier: nil)
         repeatCell.textLabel?.text = "Repeat"
         repeatCell.detailTextLabel?.text = reminder?.frequency ?? "Never"
+        repeatCell.contentView.backgroundColor = .secondarySystemGroupedBackground
         
         return repeatCell
     }
@@ -85,6 +87,7 @@ struct CreateReminderCellManager {
         let repeatCell = UITableViewCell(style: .value1 , reuseIdentifier: nil)
         repeatCell.textLabel?.text = "End Repeat"
         repeatCell.detailTextLabel?.text = reminder?.repeatEndDate?.formatDateDayEMddYYTime() ?? "Never"
+        repeatCell.contentView.backgroundColor = .secondarySystemGroupedBackground
         
         return repeatCell
     }
@@ -132,6 +135,7 @@ struct CreateReminderCellManager {
             cell.textLabel?.text = "Choose Person"
             cell.textLabel?.textColor = .systemBlue
             cell.selectionStyle = .none
+            cell.contentView.backgroundColor = .secondarySystemGroupedBackground
             return cell
         }
     }

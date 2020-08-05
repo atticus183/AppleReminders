@@ -11,7 +11,7 @@ import RealmSwift
 import SwiftUI
 import ContactsUI
 
-class CreateReminderTVC: UITableViewController {
+final class CreateReminderTVC: UITableViewController {
     
     let realm = MyRealm.getConfig()
     
@@ -33,8 +33,8 @@ class CreateReminderTVC: UITableViewController {
         
         tempReminder = Reminder(value: passedReminder as Any)
         
-        self.view.backgroundColor = .systemBackground
-        tableView.backgroundColor = .systemGray6
+        self.view.backgroundColor = .systemGroupedBackground
+        tableView.backgroundColor = .systemGroupedBackground
         tableView.tableFooterView = UIView()
         tableView.keyboardDismissMode = .onDrag
         tableView.reloadData()
@@ -92,7 +92,6 @@ class CreateReminderTVC: UITableViewController {
         let toggleCell = ToggleTVCell()
         let cell = UITableViewCell(style: .value1 , reuseIdentifier: nil)
         let subTitleCell = UITableViewCell(style: .subtitle , reuseIdentifier: nil)
-        
         
         //MARK: Assign cells to indexPath
         switch indexPath.section {
@@ -259,7 +258,7 @@ class CreateReminderTVC: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        cell.backgroundColor = .systemGray5
+        cell.backgroundColor = .secondarySystemGroupedBackground
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
