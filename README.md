@@ -19,6 +19,6 @@
 ### Features not implemented
 <br>- Saving images to reminders
 <br>- Sharing reminder lists with other users
-<br>- Sharing reminder lists with other users
+<br>- Push notifications
 
 
