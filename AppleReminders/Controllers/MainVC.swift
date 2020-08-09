@@ -71,6 +71,8 @@ final class MainVC: UIViewController {
             case .flagged:
                 reminderTVC.vcType = .flagged
             }
+            
+            guard let allLists = ReminderList.getAllLists(isGroupsIncluded: true), allLists.count > 0 else { return }
             self.navigationController?.pushViewController(reminderTVC, animated: true)
         }
         

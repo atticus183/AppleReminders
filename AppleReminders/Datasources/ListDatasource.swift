@@ -124,8 +124,10 @@ final class ListDiffableDatasource: UITableViewDiffableDataSource<ListSection, R
                 
                 guard let realm = MyRealm.getConfig() else { return }
                 try! realm.write(withoutNotifying: [realmToken!]) {
-                    listToDelete?.deleteList(isListsInGroupDelete: true)
+                    listToDelete?.deleteList()
                 }
+                
+                NotificationCenter.default.post(name: .reloadCV, object: self)
             }
         }
     }

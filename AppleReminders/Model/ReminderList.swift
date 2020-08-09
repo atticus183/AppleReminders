@@ -56,23 +56,22 @@ extension ReminderList {
     }
     
     //This method needs to be called INSIDE a realm write transaction
-    func deleteList(isListsInGroupDelete: Bool) {
+    func deleteList() {
         guard let realm = MyRealm.getConfig() else { return }
-        if isListsInGroupDelete {
-            for list in reminderLists {
-                if isListsInGroupDelete {
-                    
-                } else {
-                    //Remove lists first
-                    list.reminderLists.forEach({ list in
-                        if let index = list.reminderLists.index(of: list) {
-                            list.reminderLists.remove(at: index)
-                        }
-                    })
-                }
-            }
+        
+        //Delete Reminders
+        self.reminders.forEach({ reminder in
+            realm.delete(reminder)
+        })
+        
+        //Loop through and delete all lists (if group)
+        if self.isGroup {
+            self.reminderLists.forEach({ list in
+                realm.delete(list)
+            })
         }
         
+        //Delete self
         realm.delete(self)
     }
     

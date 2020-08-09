@@ -39,11 +39,23 @@ final class MainChildCollectionVC: UIViewController, UICollectionViewDelegate, U
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(performNotificationAction), name: .reloadCV, object: nil)
+        
         collectionView.reloadData()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self, name: .reloadCV, object: nil)
+    }
+    
+    @objc func performNotificationAction() {
+        collectionView.reloadData()
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
