@@ -10,10 +10,6 @@ import Foundation
 import UIKit
 import SwiftDate
 
-extension Notification.Name {
-    static let reloadCV = Notification.Name(rawValue: "reloadCV")
-}
-
 
 //Source: https://www.hackingwithswift.com/example-code/language/how-to-remove-duplicate-items-from-an-array
 extension Array where Element: Hashable {

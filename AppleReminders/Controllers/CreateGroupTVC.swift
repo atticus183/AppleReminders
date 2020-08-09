@@ -117,6 +117,7 @@ final class CreateGroupTVC: UITableViewController {
             return groupNameCell
         case 1:
             let includeCell = UITableViewCell(style: .value1, reuseIdentifier: nil)
+            includeCell.backgroundColor = .secondarySystemGroupedBackground
             includeCell.textLabel?.text = "Include"
             includeCell.detailTextLabel?.text = "\(selectedLists.count)"
             includeCell.accessoryType = .disclosureIndicator
@@ -129,8 +130,13 @@ final class CreateGroupTVC: UITableViewController {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 44
     }
+    
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 20
+        return 30
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return UIView()
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

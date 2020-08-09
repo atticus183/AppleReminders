@@ -44,6 +44,7 @@ final class MainVC: UIViewController {
         
         self.view.backgroundColor = .systemGroupedBackground
         
+        //Uncomment if you want to start over
 //        try! realm?.write {
 //            realm?.deleteAll()
 //        }
@@ -111,6 +112,9 @@ final class MainVC: UIViewController {
         tableView.register(ListSectionHeaderView.self, forHeaderFooterViewReuseIdentifier: ListSectionHeaderView.reuseIdentifier)
         view.addSubview(tableView)
         tableView.delegate = self
+        
+        tableView.separatorStyle = .singleLine
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: 50, bottom: 0, right: 0)
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -292,6 +296,51 @@ extension MainVC: UITableViewDelegate {
         // Toggles the actual editing actions appearing on a table view
         tableView.setEditing(editing, animated: true)
         footerView.addGroupBtn.isHidden = tableView.isEditing ? false : true
+    }
+    
+    //MARK:  Trailing swipe actions
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        let deleteAction = UIContextualAction(style: .destructive, title: nil) { [weak self] (_, _, _)  in
+            guard let self = self else { return }
+            if let listToDelete = self.listDiffableDatasource?.itemIdentifier(for: indexPath) {
+                //MARK: Deleting from snapshot
+                var snapshot = self.listDiffableDatasource?.snapshot()
+                snapshot!.deleteItems([listToDelete])
+                self.listDiffableDatasource?.apply(snapshot!)
+                
+                guard let realm = MyRealm.getConfig() else { return }
+                try! realm.write(withoutNotifying: [self.realmListToken!]) {
+                    listToDelete?.deleteList()
+                }
+                
+                self.childVC.collectionView.reloadData()
+            }
+        }
+        
+        deleteAction.image = UIImage(systemName: "trash.fill")
+        
+        let editAction = UIContextualAction(style: .normal, title: nil) { [weak self] (_, _, _)  in
+            guard let self = self else { return }
+            if let listToEdit = self.listDiffableDatasource?.itemIdentifier(for: indexPath)! {
+                
+                //Edit List or Group
+                if listToEdit.isGroup {
+                    let createGroupTVC = CreateGroupTVC()
+                    createGroupTVC.groupToEdit = listToEdit
+                    self.present(UINavigationController(rootViewController: createGroupTVC), animated: true, completion: nil)
+                } else {
+                    let createListVC = CreateListVC()
+                    createListVC.passedListToEdit = listToEdit
+                    self.present(createListVC, animated: true, completion: nil)
+                }
+            }
+        }
+        
+        editAction.backgroundColor = .systemGray
+        editAction.image = UIImage(systemName: "info.circle.fill")
+        
+        return UISwipeActionsConfiguration(actions: [deleteAction, editAction])
     }
     
 }

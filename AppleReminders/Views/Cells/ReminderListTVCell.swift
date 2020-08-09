@@ -112,8 +112,6 @@ class ReminderListTVCell: UITableViewCell {
         return imgView
     }()
     
-    let seperatorView = UIView()
-    
     //MARK: DetailDisclosure btn in editing mode
     lazy var editingDetailBtn: UIButton = {
         let button = UIButton(type: .detailDisclosure)
@@ -172,10 +170,8 @@ class ReminderListTVCell: UITableViewCell {
     
     private func setupListViews() {
         //add ui elements to containerView
-//        self.contentView.backgroundColor = .systemGray6
         self.contentView.backgroundColor = .secondarySystemGroupedBackground
-        seperatorView.backgroundColor = UIColor.systemGray.withAlphaComponent(0.5)
-        
+
         //add views to containerView
         iconBackgroundView.addSubview(listIconImgView)
         self.contentView.addSubview(iconBackgroundView)
@@ -184,12 +180,10 @@ class ReminderListTVCell: UITableViewCell {
         self.contentView.addSubview(numberOfActiveRemindersLbl)
         self.contentView.addSubview(accessoryImageView)
         self.contentView.addSubview(listTitleSV)
-        self.contentView.addSubview(seperatorView)
         
         //set constraints
         iconBackgroundView.translatesAutoresizingMaskIntoConstraints = false
         listIconImgView.translatesAutoresizingMaskIntoConstraints = false
-        seperatorView.translatesAutoresizingMaskIntoConstraints = false
         listNameLbl.translatesAutoresizingMaskIntoConstraints = false
         listTitleSV.translatesAutoresizingMaskIntoConstraints = false
         numberOfActiveRemindersLbl.translatesAutoresizingMaskIntoConstraints = false
@@ -224,12 +218,7 @@ class ReminderListTVCell: UITableViewCell {
             accessoryImageView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: -8),
             
             numberOfActiveRemindersLbl.trailingAnchor.constraint(equalTo: accessoryImageView.leadingAnchor,constant: -8),
-            numberOfActiveRemindersLbl.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
-            
-            seperatorView.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor, constant: 45),
-            seperatorView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor),
-            seperatorView.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor, constant: 0),
-            seperatorView.heightAnchor.constraint(equalToConstant: 0.5)
+            numberOfActiveRemindersLbl.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor)
         ]
     }
   
